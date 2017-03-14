@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Flasky{% endblock %}
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, Deployer</h1>
+</div>
+{% macro input(name, value='', type='text', size=20) %}
+    <input type="{{ type }}" name="{{ name }}" value="{{
+        value|e }}" size="{{ size }}">
+{% endmacro %}
+<p></p>
+<p>username {{ input('username') }}</p>
+<p>password {{ input('password', type='password') }}</p>
+
+{% macro render_dialog(title, class='dialog') -%}
+    <div class="{{ class }}">
+        <h2>{{ title }}</h2>
+        <div class="contents">
+            {{ caller() }}
+        </div>
+    </div>
+{%- endmacro %}
+
+{% call render_dialog('Hello World') %}
+    This is a simple dialog rendered by using a macro and
+    a call block.
+{% endcall %}
+
+{% macro dump_users(users) -%}
+    <ul>
+    {%- for user in users %}
+        <li><p>{{ user.username|e }}</p>{{ caller(user) }}</li>
+    {%- endfor %}
+    </ul>
+{%- endmacro %}
+
+{% call(user) dump_users([{"username":"test1","realname":"sss","description":"haha"}, {"username":"test2","realname":"sss","description":"haha"}]) %}
+    <dl>
+        <dl>Realname</dl>
+        <dd>{{ user.realname|e }}</dd>
+        <dl>Description</dl>
+        <dd>{{ user.description }}</dd>
+    </dl>
+{% endcall %}
+
+{% filter upper %}
+    This text becomes uppercase
+{% endfilter %}
+
+{% endblock %}

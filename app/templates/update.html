@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Flasky{% endblock %}
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, Deployer</h1>
+</div>
+<p>服务名：{{ serv_info.servname }}<p>
+<p>IP：{% for ip in serv_info.servips %}{{ ip }} {% endfor %}<p>
+<p>consul名称：{{ serv_info.consulname }}<p>
+{{ wtf.quick_form(form) }}
+{% endblock %}
+
