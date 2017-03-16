@@ -11,8 +11,26 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>Hello, Deployer</h1>
+<div style="padding: 0px 0px 10px;">
+	<form class="bs-example bs-example-form" role="form" method="POST">
+		<div class="row">
+			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+				<div class="input-group">
+					<input id="servname" type="text" class="form-control" name="select" value="" list="servlist" placeholder="service name">
+                    <datalist id="servlist">
+                        {% for serv in all_servs %}
+                            <option>{{ serv }}</option>
+                        {% endfor %}
+                    </datalist>
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div><!-- /input-group -->
+			</div><!-- /.col-lg-6 -->
+		</div><!-- /.row -->
+	</form>
 </div>
 
 <dl class="dl-horizontal">

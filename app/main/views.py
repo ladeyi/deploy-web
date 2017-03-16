@@ -28,7 +28,17 @@ def index():
             serv_info["port"] = serv.port
         serv_info["servip"] = serv_ips
         servs_info.append(serv_info)
-    return render_template('index.html', servs_info=servs_info)
+    session["all_servs"] = all_servs
+    session["servs_info"] = servs_info
+    if request.method == "POST":
+        input_res = request.values.get("select")
+        if input_res and input_res in session["all_servs"]:
+            for serv in servs_info:
+                if input_res == serv["servname"]:
+                    res = []
+                    res.append(serv)
+                    return render_template('index.html', servs_info=res, all_servs=all_servs)
+    return render_template('index.html', servs_info=servs_info, all_servs=all_servs)
 
 @main.route("/server", methods=['GET', 'POST'])
 def ip_index():
@@ -47,7 +57,17 @@ def ip_index():
             servs_info.append(serv_info)
         ip_info["servs"] = servs_info
         ips_info.append(ip_info)
-    return render_template('server.html', ips_info=ips_info)
+    session["all_ips"] = ips
+    session["ips_info"] = ips_info
+    if request.method == "POST":
+        input_res = request.values.get("select")
+        if input_res and input_res in session["all_ips"]:
+            for ip in ips_info:
+                if input_res == ip["ip"]:
+                    res = []
+                    res.append(ip)
+                    return render_template('server.html', ips_info=res, all_ips=ips)
+    return render_template('server.html', ips_info=ips_info, all_ips=ips)
 
 @main.route("/deploy", methods=['GET', 'POST'])
 def deploy_index():
