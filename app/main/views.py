@@ -15,15 +15,39 @@ from markupsafe import Markup
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    #session["distinct_servs"] = [serv[0] for serv in db.session.query(Serv.servname).distinct()]
-    servs = Serv.query.all()
-    return render_template('index.html', servs=servs)
+    all_servs = [serv[0] for serv in db.session.query(Serv.servname).distinct()]
+    servs_info = []
+    for servname in all_servs:
+        serv_info = {}
+        servs = Serv.query.filter_by(servname=servname).all()
+        serv_info["servname"] = servname
+        serv_ips = []
+        for serv in servs:
+            serv_ips.append(serv.ip)
+            serv_info["consulname"] = serv.consulname
+            serv_info["port"] = serv.port
+        serv_info["servip"] = serv_ips
+        servs_info.append(serv_info)
+    return render_template('index.html', servs_info=servs_info)
 
 @main.route("/server", methods=['GET', 'POST'])
 def ip_index():
-    #session["distinct_ips"] = [ip[0] for ip in db.session.query(Serv.ip).distinct()]
-    servs = Serv.query.order_by("ip").all()
-    return render_template('server.html', servs=servs)
+    ips = [ip[0] for ip in db.session.query(Serv.ip).distinct()]
+    ips_info = []
+    for ip in ips:
+        ip_info = {}
+        servs = Serv.query.filter_by(ip=ip).all()
+        ip_info["ip"] = ip
+        servs_info = []
+        for serv in servs:
+            serv_info = {}
+            serv_info["servname"] = serv.servname
+            serv_info["consulname"] = serv.consulname
+            serv_info["port"] = serv.port
+            servs_info.append(serv_info)
+        ip_info["servs"] = servs_info
+        ips_info.append(ip_info)
+    return render_template('server.html', ips_info=ips_info)
 
 @main.route("/deploy", methods=['GET', 'POST'])
 def deploy_index():
@@ -72,7 +96,7 @@ def update():
         if jar_name_re and jar_name_re.group(3) == serv_info["servname"]:
             flash(Markup('deploy successfully!'), 'success')
         else:
-            flash(Markup('please check your URL!'), 'success')
+            flash(Markup('please check your URL!'), 'warning')
             #flash('please check your URL!', 'warning')
             return redirect(url_for('main.update'))
 

@@ -27,8 +27,8 @@
     {% for ip in serv_info.servip %}
     <p><input name="ips" value="{{ ip }}"  type="checkbox">{{ ip }}</p>
     {% endfor %}
-    <input  name="deploy" type="submit" value="auto_deploy">
-    <input  name="deploy" type="submit" value="manual_deploy">
+    <button  name="deploy" type="submit" value="auto_deploy" class="btn btn-default">auto_deploy</button>
+    <button  name="deploy" type="submit" value="manual_deploy" class="btn btn-default">manual_deploy</button>
 </form>
 {% endif %}
 {% endblock %}

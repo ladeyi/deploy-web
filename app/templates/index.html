@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Flasky{% endblock %}
 {% block sidebar_content %}
-<ul class="nav nav-list">
+<ul class="nav nav-list" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <li class="nav-header">查询维度</li>
   <li><a href="/">服务维度</a></li>
   <li class="divider"></li>
@@ -15,13 +15,43 @@
     <h1>Hello, Deployer</h1>
 </div>
 
-<ul>
-{% for serv in servs %}
-    <li><b><a href="/deploy/{{ serv.servname }}">{{ serv.servname }}</a></b></li>
-    <p>serverip: {{ serv.ip }}</p>
-    <p>consulname: {{ serv.consulname }}</p>
+<dl class="dl-horizontal">
 
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Num</th>
+                <th>Servname</th>
+                <th>Consulname</th>
+                <th>Ip</th>
+                <th>Port</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in range(servs_info|length) %}
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td valign="centor"> <a href="/deploy/{{ servs_info[i].servname }}">{{ servs_info[i].servname }}</a></td>
+                    <td>{{ servs_info[i].consulname }}</td>
+                    <td>{% for ip in servs_info[i].servip %}{{ ip }}<br />{% endfor %}</td>
+                    <td>{{ servs_info[i].port }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--
+{% for serv in servs_info %}
+    <p><b><a href="/deploy/{{ serv.servname }}">{{ serv.servname }}</a></b></p>
+    <dt>serverip:</dt>
+    <dd>{% for ip in serv.servip %}{{ ip }},{% endfor %}</dd>
+    <dt>consulname:</dt>
+    <dd>{{ serv.consulname }}</dd>
 {% endfor %}
-</ul>
+-->
+</dl>
 
 {% endblock %}

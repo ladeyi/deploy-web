@@ -6,7 +6,7 @@
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='test.css') }}"> 
+<!--<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='test.css') }}">-->
 {% endblock %}
 
 {% block navbar %}
@@ -19,12 +19,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">服务列表</a>
-            <a class="navbar-brand" href="/deploy">部署</a>
+            <a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home">Deploy-Web</span></a>
+
         </div>
-        <div class="navbar-collapse collapse">
+        <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
+                <li><a href="/"><span class="glyphicon glyphicon-list-alt">服务列表</span></a></li>
+                <li><a href="/deploy"><span class="glyphicon glyphicon-tasks"></span>服务部署</a></li>
             </ul>
         </div>
     </div>
@@ -32,19 +33,26 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span2">
+<div class="container">
+  <div class="row">
+    <div class="col-md-3 col-lg-3">
       {% block sidebar_content %}{% endblock %}
       <!--Sidebar content-->
     </div>
-    <div class="span10">
-        {% for message in get_flashed_messages() %}
-        <div class="alert alert-warning">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ message }}
-        </div>
-        {% endfor %}
+    <div class="clearfix visible-xs"></div>
+    <div class="col-md-9 col-lg-9">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <!-- <strong>Title</strong> --> {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
         {% block page_content %}{% endblock %}
     </div>
   </div>

@@ -15,12 +15,38 @@
     <h1>Hello, Deployer</h1>
 </div>
 
-<ul>
-{% for serv in servs %}
-    <li><b>{{ serv.ip }}</b></li>
-    <p>servname: {{ serv.servname }}</p>
-    <p>consulname: {{ serv.consulname }}</p>
-{% endfor %}
-</ul>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Num</th>
+                <th>IP</th>
+                <th>Servname</th>
+                <th>Consulname</th>
+                <th>Port</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for i in range(ips_info|length) %}
+                    <tr>
+                        <td rowspan="{{ ips_info[i].servs|length }}">{{ i + 1 }}</td>
+                        <td rowspan="{{ ips_info[i].servs|length }}">{{ ips_info[i].ip }}</td>
+                        <td>{{ ips_info[i].servs[0].servname }}</td>
+                        <td>{{ ips_info[i].servs[0].consulname }}</td>
+                        <td>{{ ips_info[i].servs[0].port }}</td>
+                    </tr>
+                    {% for serv in ips_info[i].servs[1:] %}
+                        <tr>
+                            <td>{{ serv.servname }}</td>
+                            <td>{{ serv.consulname }}</td>
+                            <td>{{ serv.port }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}
